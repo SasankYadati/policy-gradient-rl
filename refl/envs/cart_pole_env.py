@@ -21,7 +21,7 @@ class State:
     def getTensor(self):
         return t.tensor(self.getList(), dtype=t.float32)
 
-INITIAL_STATE = State(0, 0, 0, 0, 0).getTensor()
+INITIAL_STATE = State(0, 0, 0, 0, 0)
 
 F = 10 #Newton
 CART_MASS = 1 #kg
@@ -51,11 +51,11 @@ class CartPoleEnv(Env):
         self.F = F
         self.state = INITIAL_STATE
         self.delta_t = STEP
-        self.n_state_dims = 5
+        self.n_state_dims = 4
         self.n_actions = 2
 
-    def isDone(self, state: t.Tensor) -> bool:
-        x, _, theta, _, t = state
+    def isDone(self, state: State) -> bool:
+        x, _, theta, _, t = state.getList()
         return (
             (x < X_RANGE[0] or x > X_RANGE[1]) or
             (theta < THETA_RANGE[0] or theta > THETA_RANGE[1]) or
@@ -70,9 +70,9 @@ class CartPoleEnv(Env):
         clipped_theta_v = min(max(theta_dot, THETA_V_RANGE[0]), THETA_V_RANGE[1])
         return clipped_theta_v
 
-    def transition_fn(self, state: t.Tensor, action: int) -> State:
+    def transition_fn(self, state: State, action: int) -> State:
         assert action in ACTIONS.keys()
-        x, x_dot, theta, theta_dot, t = state
+        x, x_dot, theta, theta_dot, t = state.getList()
 
         F = ACTIONS[action] * self.F
         costheta = math.cos(theta)
@@ -91,15 +91,15 @@ class CartPoleEnv(Env):
         theta_dot = theta_dot + self.delta_t * theta_dot_dot
         theta_dot = self.clipAngVelocity(theta_dot)
 
-        t += STEP
+        t += self.delta_t
 
-        return State(x, x_dot, theta, theta_dot, t).getTensor()
+        return State(x, x_dot, theta, theta_dot, t)
 
     def step(self, action: int) -> tuple[t.Tensor, float, bool]:
         self.state = self.transition_fn(self.state, action)
         is_done = self.isDone(self.state)
-        return self.state, REWARD, is_done
+        return self.state.getTensor()[:-1], REWARD, is_done
 
-    def reset(self) -> t.Tensor:
+    def reset(self) -> tuple[t.Tensor, float] :
         self.state = INITIAL_STATE
-        return INITIAL_STATE, REWARD
+        return self.state.getTensor()[:-1], REWARD

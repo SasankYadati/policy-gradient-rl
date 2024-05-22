@@ -5,7 +5,7 @@ import torch as t
 
 def getDetailedEpisode(episode:Episode) -> EpisodeDetail:
         lastStep = episode.steps[-1]
-        T = len(episode.steps)-1
+        T = len(episode.steps)
         lastDetailedStep = StepDetail(lastStep.state, lastStep.action, lastStep.reward, T, 0.0)
         detailedSteps = [lastDetailedStep]
         for step in reversed(episode.steps[:-1]):

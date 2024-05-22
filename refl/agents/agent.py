@@ -18,7 +18,6 @@ class Agent:
         while not done:
             action = self.getAction(state)
             next_state, rew, done = env.step(action)
-            print(f's={state}, a={action}, r={rew}, s`={next_state}')
             steps.append(Step(state, action, rew, t))
             rewards.append(rew)
             state = next_state

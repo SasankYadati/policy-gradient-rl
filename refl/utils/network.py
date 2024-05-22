@@ -3,12 +3,17 @@ import einops
 
 class MLP(t.nn.Module):
     def __init__(self, n_in, n_hidden, n_out):
-        super().__init__()
-        self.l1 = t.nn.Linear(n_in, n_hidden)
-        self.l2 = t.nn.Linear(n_hidden, n_out)
+        super(MLP, self).__init__()
+        self.affine1 = t.nn.Linear(n_in, n_hidden)
+        self.dropout = t.nn.Dropout(p=0.6)
+        self.affine2 = t.nn.Linear(n_hidden, n_out)
+
+        self.saved_log_probs = []
+        self.rewards = []
 
     def forward(self, x):
-        hidden = self.l1(x)
-        hidden = t.nn.functional.gelu(hidden)
-        out = self.l2(hidden)
-        return out
+        x = self.affine1(x)
+        x = self.dropout(x)
+        x = t.nn.functional.relu(x)
+        action_scores = self.affine2(x)
+        return t.nn.functional.softmax(action_scores, dim=1)

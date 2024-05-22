@@ -13,6 +13,8 @@ ACTIONS = {UP:(0,1), DOWN:(0,-1), LEFT:(-1,0), RIGHT:(1,0)}
 
 STATES = {i:(i%GRID_SZ, i//GRID_SZ) for i in range(GRID_SZ*GRID_SZ)}
 
+MAX_STEPS = 500
+
 def getStateID(i,j):
     return i + j * GRID_SZ
 
@@ -46,6 +48,7 @@ class GridWorldEnv(Env):
         self.blocked_state_2 = getStateID(3,2)
         self.n_state_dims = 1
         self.n_actions = 4
+        self.t = 0
 
     def getRewardForEnteringState(self, state:int):
         if state == self.water_state:
@@ -108,15 +111,19 @@ class GridWorldEnv(Env):
 
     def reset(self):
         self.current_state = 0
-        return self.current_state, 0
+        self.t = 0
+        return t.tensor([self.current_state], dtype=t.float32), 0.0
 
     def step(self, action):
         trans_probs = self.getTransitionProbs(self.current_state, action)
         next_state = sampleFromDistribution(trans_probs)
         next_reward = self.getRewardForEnteringState(next_state)
-        done = next_state == self.goal_state
+        done = next_state == self.goal_state or self.t == MAX_STEPS
+        # if self.t == MAX_STEPS:
+        #     next_reward -= 100.0
         self.current_state = next_state
-        return next_state, next_reward, done
+        self.t += 1
+        return t.tensor([next_state], dtype=t.float32), next_reward, done, None, None
     
     def getTransistionFn(self):
         T = t.empty(len(STATES), len(ACTIONS), len(STATES))
