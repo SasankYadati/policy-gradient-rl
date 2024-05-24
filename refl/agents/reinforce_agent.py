@@ -1,7 +1,7 @@
 from refl.agents.agent import Agent
 from refl.agents.runner import getDetailedEpisode
 from refl.utils.utils import sampleFromDistribution
-from refl.utils.network import MLP
+from refl.utils.network import PolicyNet
 from refl.utils.episode import Episode, EpisodeDetail
 from refl.envs import Env
 import torch
@@ -10,7 +10,7 @@ from collections import deque
 class ReinforceAgent(Agent):
     def __init__(self, n_state_dims, n_latent_dims, n_actions, gamma):
         self.n_actions = n_actions
-        self.policy_network = MLP(n_state_dims, n_latent_dims, n_actions)
+        self.policy_network = PolicyNet(n_state_dims, n_latent_dims, n_actions)
         # self.eps = eps
         self.gamma = gamma
         self.sampler = torch.distributions.uniform.Uniform(0, 1)
