@@ -13,7 +13,7 @@ ACTIONS = {UP:(0,1), DOWN:(0,-1), LEFT:(-1,0), RIGHT:(1,0)}
 
 STATES = {i:(i%GRID_SZ, i//GRID_SZ) for i in range(GRID_SZ*GRID_SZ)}
 
-MAX_STEPS = 500
+MAX_STEPS = 800
 
 def getStateID(i,j):
     return i + j * GRID_SZ
@@ -56,7 +56,7 @@ class GridWorldEnv(Env):
         elif state == self.goal_state:
             return 10.0
         else:
-            return 0.0
+            return 0
         
     def getRewardFn(self) -> t.Tensor:
         R = t.zeros(len(STATES), len(ACTIONS), len(STATES))
@@ -109,7 +109,7 @@ class GridWorldEnv(Env):
 
         return p
 
-    def reset(self):
+    def reset(self, seed:int):
         self.current_state = 0
         self.t = 0
         return t.tensor([self.current_state], dtype=t.float32), 0.0
@@ -119,8 +119,6 @@ class GridWorldEnv(Env):
         next_state = sampleFromDistribution(trans_probs)
         next_reward = self.getRewardForEnteringState(next_state)
         done = next_state == self.goal_state or self.t == MAX_STEPS
-        # if self.t == MAX_STEPS:
-        #     next_reward -= 100.0
         self.current_state = next_state
         self.t += 1
         return t.tensor([next_state], dtype=t.float32), next_reward, done, None, None

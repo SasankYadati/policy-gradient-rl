@@ -100,6 +100,6 @@ class CartPoleEnv(Env):
         is_done = self.isDone(self.state)
         return self.state.getTensor()[:-1], REWARD, is_done
 
-    def reset(self) -> tuple[t.Tensor, float] :
+    def reset(self, seed:int) -> tuple[t.Tensor, float] :
         self.state = INITIAL_STATE
         return self.state.getTensor()[:-1], REWARD
