@@ -3,7 +3,7 @@ Note - I was not able to get the algorithms to learn with gamma term in the upda
 
 While learning, I have considered Gridworld as solved if it gets 9.5 average return (running avg) and Cartpole as solved if it gets 500 average return.
 
-All agents after learning is done for specified number of episodes are evaluated on 10 episodes.
+After learning is done, all agents are evaluated on 10 episodes.
 
 The function approximators and hyperparameter details are [here](/function_approximators_and_hyperparams.pdf)
 ## Reinforce
@@ -27,7 +27,7 @@ Agent with $\gamma = 1.0$ has performed the best, achieved 9000 return.
 ## Baseline Reinforce
 
 ### Gridworld
-Agents with $\gamma=1.0, 0.99$ have learnt near-optimal policies whereas agent with $\gamma=0.95$ went on a spiral and seems to have got stuck in a local minima.
+Agents with $\gamma=1.0, 0.99$ have learnt near-optimal policies whereas agent with $\gamma=0.95$ went on a spiral and seems to have got stuck in a local minima of value 0.
 #### Learning - Avg return over No. of Episodes
 ![learning curves for gridworld](/baseline-reinforce-gridworld-learning-curve.png)
 
