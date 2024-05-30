@@ -3,7 +3,7 @@ Note - I was not able to get the algorithms to learn with gamma term in the upda
 
 While learning, I have considered Gridworld as solved if it gets 9.5 average return (running avg) and Cartpole as solved if it gets 500 average return.
 
-All agents after learning is done for specified number of episodes are evaluated on 10 episodes.
+After learning is done, all agents are evaluated on 10 episodes.
 
 The function approximators and hyperparameter details are [here](/function_approximators_and_hyperparams.pdf)
 ## Reinforce
