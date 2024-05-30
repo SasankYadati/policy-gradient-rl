@@ -27,7 +27,7 @@ Agent with $\gamma = 1.0$ has performed the best, achieved 9000 return.
 ## Baseline Reinforce
 
 ### Gridworld
-Agents with $\gamma=1.0, 0.99$ have learnt near-optimal policies whereas agent with $\gamma=0.95$ went on a spiral and seems to have got stuck in a local minima.
+Agents with $\gamma=1.0, 0.99$ have learnt near-optimal policies whereas agent with $\gamma=0.95$ went on a spiral and seems to have got stuck in a local minima of value 0.
 #### Learning - Avg return over No. of Episodes
 ![learning curves for gridworld](/baseline-reinforce-gridworld-learning-curve.png)
 
